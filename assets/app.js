@@ -5,7 +5,7 @@
   const params = new URLSearchParams(location.search);
   const DATA_DIR = params.has("sample") ? "sample-data" : "data";
   const STORE_KEY = "econ-dash-v1";
-  const PERIOD_DAYS = { "1m": 31, "1y": 366, "5y": 366 * 5 + 2 };
+  const PERIOD_DAYS = { "1m": 31, "1y": 366, "5y": 366 * 5 + 2, "10y": 366 * 10 + 3 };
   const MIN_POINTS = 6; // 월·분기 지표는 기간이 짧아도 최소 이만큼 보여줌
   const SOURCE_LABEL = { yahoo: "Yahoo", fred: "FRED", ecos: "ECOS", manual: "수동" };
 

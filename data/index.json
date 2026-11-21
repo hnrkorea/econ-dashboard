@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-21T03:10:55+00:00",
+ "generated_at": "2026-11-21T03:16:09+00:00",
  "indicators": [
   {
    "id": "dji",
@@ -13,11 +13,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-11-20",
    "last_value": 48147.33,
    "prev_value": 49097.05859375,
-   "count": 1255,
+   "count": 2514,
    "fallback_used": false
   },
   {
@@ -32,11 +32,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-11-20",
    "last_value": 6910.39,
    "prev_value": 7175.830078125,
-   "count": 1255,
+   "count": 2514,
    "fallback_used": false
   },
   {
@@ -51,11 +51,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-11-20",
    "last_value": 22617.732,
    "prev_value": 23879.19921875,
-   "count": 1255,
+   "count": 2514,
    "fallback_used": false
   },
   {
@@ -70,11 +70,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-11-20",
    "last_value": 4869.96,
    "prev_value": 5137.89013671875,
-   "count": 1221,
+   "count": 2448,
    "fallback_used": false
   },
   {
@@ -89,11 +89,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-11-20",
    "last_value": 645.68,
    "prev_value": 684.8099975585938,
-   "count": 1221,
+   "count": 2448,
    "fallback_used": false
   },
   {
@@ -108,11 +108,11 @@
    "note": "폴백(ECOS 매매기준율)은 Yahoo 실시간가보다 보통 1% 안팎 낮게 나올 수 있음",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-11-20",
    "last_value": 1346.13,
    "prev_value": 1330.4000244140625,
-   "count": 1300,
+   "count": 2602,
    "fallback_used": false
   },
   {
@@ -127,11 +127,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-10-01",
    "last_value": 3.0,
    "prev_value": 3.0,
-   "count": 61,
+   "count": 121,
    "fallback_used": false
   },
   {
@@ -146,11 +146,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-11-20",
    "last_value": 4.0,
    "prev_value": 4.0,
-   "count": 1855,
+   "count": 3680,
    "fallback_used": false
   },
   {
@@ -165,11 +165,11 @@
    "note": "Yahoo ^TNX 값은 % 단위",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-11-20",
    "last_value": 4.912,
    "prev_value": 5.052000045776367,
-   "count": 1255,
+   "count": 2514,
    "fallback_used": false
   },
   {
@@ -184,11 +184,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-09-01",
    "last_value": 4.57,
    "prev_value": 4.4,
-   "count": 60,
+   "count": 120,
    "fallback_used": false
   },
   {
@@ -203,11 +203,11 @@
    "note": "ECOS에 코픽스 통계표 없어 은행연합회 소비자포털(portal.kfb.or.kr) 공시 표를 직접 수집. 월 1회(매월 15일경) 갱신",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-10-01",
    "last_value": 3.62,
    "prev_value": 3.43,
-   "count": 71,
+   "count": 131,
    "fallback_used": false
   },
   {
@@ -222,11 +222,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-07-01",
    "last_value": 1.0,
    "prev_value": 0.6,
-   "count": 20,
+   "count": 40,
    "fallback_used": false
   },
   {
@@ -241,11 +241,11 @@
    "note": "실거래 등록 특성상 최신월이 2~3개월 지연 표시될 수 있음",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-08-01",
    "last_value": 102.6,
    "prev_value": 101.8,
-   "count": 59,
+   "count": 119,
    "fallback_used": false
   },
   {
@@ -260,11 +260,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-11-20",
    "last_value": 83.62,
    "prev_value": 83.20999908447266,
-   "count": 1256,
+   "count": 2515,
    "fallback_used": false
   },
   {
@@ -279,11 +279,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-11-20",
    "last_value": 3539.0,
    "prev_value": 3685.5,
-   "count": 1257,
+   "count": 2515,
    "fallback_used": false
   },
   {
@@ -298,11 +298,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-07-01",
    "last_value": 3.4,
    "prev_value": 2.2,
-   "count": 20,
+   "count": 40,
    "fallback_used": false
   },
   {
@@ -317,11 +317,11 @@
    "note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-21T03:10:55+00:00",
+   "fetched_at": "2026-11-21T03:16:09+00:00",
    "last_date": "2026-11-20",
    "last_value": 103.84,
    "prev_value": 103.9000015258789,
-   "count": 1257,
+   "count": 2516,
    "fallback_used": false
   }
  ]

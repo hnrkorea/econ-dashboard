@@ -22,7 +22,7 @@ import requests
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "indicators.json"
 DATA = ROOT / "data"
-YEARS = 5
+YEARS = 10
 UA = {"User-Agent": "Mozilla/5.0 (econ-dashboard; +https://github.com)"}
 TIMEOUT = 20
 
