@@ -1,0 +1,32 @@
+{
+  "_comment": "수집할 지표 목록. 이 파일을 고치고 커밋하면 다음 정시 실행부터 반영됩니다. verify:true 항목은 통계코드를 실제 API로 확인해야 합니다(CLAUDE.md 참고).",
+  "indicators": [
+    { "id": "dji",    "name": "다우존스",        "group": "미국 증시", "source": "yahoo", "symbol": "^DJI",  "unit": "pt", "decimals": 2, "style": "line", "visible": true,
+      "fallback": { "source": "fred", "series": "DJIA" } },
+    { "id": "spx",    "name": "S&P 500",        "group": "미국 증시", "source": "yahoo", "symbol": "^GSPC", "unit": "pt", "decimals": 2, "style": "line", "visible": true,
+      "fallback": { "source": "fred", "series": "SP500" } },
+    { "id": "ixic",   "name": "나스닥 종합",     "group": "미국 증시", "source": "yahoo", "symbol": "^IXIC", "unit": "pt", "decimals": 2, "style": "line", "visible": true,
+      "fallback": { "source": "fred", "series": "NASDAQCOM" } },
+    { "id": "kospi",  "name": "코스피",          "group": "한국 증시", "source": "yahoo", "symbol": "^KS11", "unit": "pt", "decimals": 2, "style": "line", "visible": true },
+    { "id": "kosdaq", "name": "코스닥",          "group": "한국 증시", "source": "yahoo", "symbol": "^KQ11", "unit": "pt", "decimals": 2, "style": "line", "visible": true },
+    { "id": "usdkrw", "name": "원/달러 환율",    "group": "환율",      "source": "yahoo", "symbol": "KRW=X", "unit": "원", "decimals": 2, "style": "line", "visible": true,
+      "fallback": { "source": "ecos", "stat": "731Y001", "cycle": "D", "item": "0000001" },
+      "note": "폴백(ECOS 매매기준율)은 Yahoo 실시간가보다 보통 1% 안팎 낮게 나올 수 있음" },
+
+    { "id": "kr_base_rate", "name": "한국 기준금리", "group": "금리", "source": "ecos", "stat": "722Y001", "cycle": "M", "item": "0101000", "unit": "%", "decimals": 2, "style": "step", "visible": true },
+    { "id": "us_fed_rate",  "name": "미국 기준금리(상단)", "group": "금리", "source": "fred", "series": "DFEDTARU", "unit": "%", "decimals": 2, "style": "step", "visible": true },
+    { "id": "us10y",        "name": "미국 10년물 국채금리", "group": "금리", "source": "yahoo", "symbol": "^TNX", "unit": "%", "decimals": 3, "style": "line", "visible": true, "note": "Yahoo ^TNX 값은 % 단위",
+      "fallback": { "source": "fred", "series": "DGS10" } },
+    { "id": "kr_loan_rate", "name": "예금은행 대출금리(신규, 가중평균)", "group": "금리", "source": "ecos", "stat": "121Y006", "cycle": "M", "item": "BECBLA01", "unit": "%", "decimals": 2, "style": "line", "visible": true },
+    { "id": "cofix",        "name": "코픽스(신규취급액 기준)", "group": "금리", "source": "kfb_cofix", "unit": "%", "decimals": 2, "style": "step", "visible": true, "note": "ECOS에 코픽스 통계표 없어 은행연합회 소비자포털(portal.kfb.or.kr) 공시 표를 직접 수집. 월 1회(매월 15일경) 갱신" },
+
+    { "id": "kr_gdp",  "name": "한국 경제성장률(실질, 전기비)", "group": "경기", "source": "ecos", "stat": "200Y102", "cycle": "Q", "item": "10111", "unit": "%", "decimals": 1, "style": "bar", "visible": true },
+
+    { "id": "wti",  "name": "WTI 유가",  "group": "원자재", "source": "yahoo", "symbol": "CL=F", "unit": "$/배럴", "decimals": 2, "style": "line", "visible": true,
+      "fallback": { "source": "fred", "series": "DCOILWTICO" } },
+    { "id": "gold", "name": "금 시세",   "group": "원자재", "source": "yahoo", "symbol": "GC=F", "unit": "$/온스", "decimals": 1, "style": "line", "visible": true },
+
+    { "id": "us_gdp", "name": "미국 경제성장률(실질, 연율)", "group": "경기", "source": "fred", "series": "A191RL1Q225SBEA", "unit": "%", "decimals": 1, "style": "bar", "visible": false },
+    { "id": "dxy",    "name": "달러인덱스",                "group": "환율", "source": "yahoo", "symbol": "DX-Y.NYB", "unit": "pt", "decimals": 2, "style": "line", "visible": false }
+  ]
+}

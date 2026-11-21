@@ -1,0 +1,45 @@
+name: 경제지표 매시간 갱신
+
+on:
+  schedule:
+    - cron: "7 * * * *"   # 매시 7분(UTC 기준이지만 '매시간'이라 시간대 무관). 정각은 혼잡해 지연이 잦음
+  workflow_dispatch:        # Actions 탭에서 수동 실행 가능
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: 데이터 수집
+        env:
+          ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python scripts/fetch_data.py
+
+      - name: 변경분 커밋
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "변경 없음"
+          else
+            git commit -m "data: $(date -u +'%Y-%m-%d %H:%M') UTC 갱신"
+            git pull --rebase --autostash
+            git push
+          fi

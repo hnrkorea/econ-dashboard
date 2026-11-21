@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>경제지표 대시보드</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="viz-root">
+    <header class="top">
+      <div>
+        <h1>경제지표 대시보드</h1>
+        <p class="sub" id="updated">데이터 불러오는 중…</p>
+      </div>
+      <div class="controls" role="toolbar" aria-label="보기 설정">
+        <div class="seg" id="period" role="group" aria-label="기간">
+          <button data-p="1m">1개월</button>
+          <button data-p="1y">1년</button>
+          <button data-p="5y">5년</button>
+        </div>
+        <label class="sel">열 수
+          <select id="cols">
+            <option value="auto">자동</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </label>
+        <button class="theme" id="theme" title="화면 테마 전환">테마</button>
+      </div>
+    </header>
+
+    <div id="banner" class="banner" hidden></div>
+    <main id="grid" class="grid" aria-live="polite"></main>
+
+    <section class="manage" aria-labelledby="manage-h">
+      <h2 id="manage-h">그래프 항목 관리</h2>
+      <p class="hint">체크를 끄면 화면에서 숨겨지고, 순서 버튼으로 배치를 바꿀 수 있습니다. 설정은 이 브라우저에 저장됩니다.</p>
+      <div class="manage-table-wrap">
+        <table class="manage-table">
+          <thead><tr><th>표시</th><th>지표</th><th>분류</th><th>출처</th><th>상태</th><th>순서</th><th></th></tr></thead>
+          <tbody id="manage-body"></tbody>
+        </table>
+      </div>
+      <div class="manage-actions">
+        <button id="reset">기본 배치로 되돌리기</button>
+      </div>
+
+      <h3>새 항목 추가</h3>
+      <p class="hint">데이터는 서버(GitHub Actions)가 매시간 수집합니다. 여기서 추가하면 아래 설정 코드가 만들어지고,
+        이 코드를 <code>config/indicators.json</code>에 넣어 커밋하면 다음 정시 수집부터 그래프가 채워집니다.</p>
+      <form id="add-form" class="add-form">
+        <label>이름 <input name="name" required placeholder="예: 엔/달러 환율"></label>
+        <label>분류 <input name="group" placeholder="예: 환율"></label>
+        <label>출처
+          <select name="source">
+            <option value="yahoo">Yahoo Finance (주가·환율·원자재)</option>
+            <option value="fred">FRED (미국 통계)</option>
+            <option value="ecos">한국은행 ECOS</option>
+            <option value="manual">수동 CSV</option>
+          </select>
+        </label>
+        <label data-for="yahoo">심볼 <input name="symbol" placeholder="예: JPY=X, ^N225"></label>
+        <label data-for="fred">시리즈 ID <input name="series" placeholder="예: CPIAUCSL"></label>
+        <label data-for="ecos">통계표 코드 <input name="stat" placeholder="예: 722Y001"></label>
+        <label data-for="ecos">주기
+          <select name="cycle"><option>D</option><option selected>M</option><option>Q</option><option>A</option></select>
+        </label>
+        <label data-for="ecos">항목 코드 <input name="item" placeholder="예: 0101000"></label>
+        <label data-for="manual">CSV 경로 <input name="file" placeholder="manual/파일명.csv"></label>
+        <label>단위 <input name="unit" placeholder="%, 원, pt"></label>
+        <label>소수점 <input name="decimals" type="number" min="0" max="4" value="2"></label>
+        <label>그래프 모양
+          <select name="style"><option value="line">선</option><option value="step">계단(금리)</option><option value="bar">막대(성장률)</option></select>
+        </label>
+        <button type="submit" class="primary">추가</button>
+      </form>
+      <div id="snippet-wrap" hidden>
+        <p class="hint">아래 코드를 <code>config/indicators.json</code>의 <code>"indicators"</code> 목록에 추가하세요.</p>
+        <pre id="snippet"></pre>
+        <button id="copy">복사</button>
+      </div>
+    </section>
+
+    <footer class="foot">
+      출처: Yahoo Finance(비공식), 한국은행 ECOS, FRED, 은행연합회. 투자 판단의 근거로 쓰기 전에 원 출처를 확인하세요.
+    </footer>
+  </div>
+
+  <script src="assets/vendor/chart.umd.min.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
