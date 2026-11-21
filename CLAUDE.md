@@ -26,7 +26,10 @@
    - usdkrw→ECOS 731Y001/D/0000001(매매기준율) — Yahoo 실시간가보다 보통 1% 안팎 낮게 나올 수 있음(note 추가)
    - kospi·kosdaq·gold·dxy는 폴백 없음: ECOS/FRED에 있는 후보가 전부 스케일이 달라(지수 기준연도 다름 등) 그대로 꽂으면 차트에 불연속이 생겨 제외. 장애 시 이전 값 유지로 동작(기존 구조)
    - `data/index.json`에 `fallback_used` 필드 추가(평소 false, 폴백 전환 시 true) — app.js는 알 수 없는 필드를 무시하므로 수정 불필요
-5. 배포: README의 '처음 설정' 순서대로 GitHub 저장소·Secrets·Pages 설정
+5. ~~**배포**~~ — 2026-11-21 완료. `hnrkorea/econ-dashboard` (Public) 생성·push, Secrets(ECOS_API_KEY/FRED_API_KEY) 등록, Actions 쓰기권한, Pages 활성화, 수동 실행까지 16/16 성공 확인. https://hnrkorea.github.io/econ-dashboard/
+
+## 완료 상태
+1~5번 전부 완료(2026-11-21). 매시 7분 GitHub Actions가 자동 수집·커밋, GitHub Pages가 서빙. 추가로 필요한 조치가 보이면 이 섹션 위에 새 작업으로 추가.
 
 ## 미리보기
 `python tools/make_sample_data.py` 후 `python -m http.server` → `/?sample=1`
