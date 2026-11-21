@@ -22,6 +22,8 @@
 
     { "id": "kr_gdp",  "name": "한국 경제성장률(실질, 전기비)", "group": "경기", "source": "ecos", "stat": "200Y102", "cycle": "Q", "item": "10111", "unit": "%", "decimals": 1, "style": "bar", "visible": true },
 
+    { "id": "seoul_apt_price", "name": "서울 아파트 실거래가격지수", "group": "부동산", "source": "ecos", "stat": "901Y089", "cycle": "M", "item": "200", "unit": "pt", "decimals": 1, "style": "line", "visible": true, "note": "실거래 등록 특성상 최신월이 2~3개월 지연 표시될 수 있음" },
+
     { "id": "wti",  "name": "WTI 유가",  "group": "원자재", "source": "yahoo", "symbol": "CL=F", "unit": "$/배럴", "decimals": 2, "style": "line", "visible": true,
       "fallback": { "source": "fred", "series": "DCOILWTICO" } },
     { "id": "gold", "name": "금 시세",   "group": "원자재", "source": "yahoo", "symbol": "GC=F", "unit": "$/온스", "decimals": 1, "style": "line", "visible": true },
