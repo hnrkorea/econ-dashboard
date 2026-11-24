@@ -2,7 +2,11 @@ name: 경제지표 매시간 갱신
 
 on:
   schedule:
-    - cron: "7 * * * *"   # 매시 7분(UTC 기준이지만 '매시간'이라 시간대 무관). 정각은 혼잡해 지연이 잦음
+    # GitHub 예약 실행은 '최선 노력' 방식이라 개인 저장소에서는 많이 누락됨
+    # (실측: 매시 1회 설정인데 실제로는 5~10시간에 1번꼴로만 실행).
+    # 15분마다 깨워서 놓친 회차를 메우고, 아래 '실행 간격 확인' 단계가
+    # 마지막 수집 후 50분이 안 지났으면 건너뛰어 실제 수집은 약 1시간 간격을 유지함.
+    - cron: "7,22,37,52 * * * *"
   workflow_dispatch:        # Actions 탭에서 수동 실행 가능
 
 permissions:
@@ -19,19 +23,45 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: 실행 간격 확인
+        id: gate
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          python3 - <<'PY'
+          import json, os, datetime as dt
+          run = "true"
+          if os.environ["EVENT"] == "schedule":
+              try:
+                  g = json.load(open("data/index.json"))["generated_at"]
+                  age = (dt.datetime.now(dt.timezone.utc) - dt.datetime.fromisoformat(g)).total_seconds() / 60
+                  print(f"마지막 수집 후 {age:.0f}분 경과")
+                  if age < 50:
+                      run = "false"
+              except Exception as e:
+                  print("generated_at 확인 실패, 수집 진행:", e)
+          print("수집 진행" if run == "true" else "아직 1시간이 안 돼 건너뜀")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"run={run}\n")
+          PY
+
       - uses: actions/setup-python@v5
+        if: steps.gate.outputs.run == 'true'
         with:
           python-version: "3.12"
 
       - run: pip install -r requirements.txt
+        if: steps.gate.outputs.run == 'true'
 
       - name: 데이터 수집
+        if: steps.gate.outputs.run == 'true'
         env:
           ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python scripts/fetch_data.py
 
       - name: 변경분 커밋
+        if: steps.gate.outputs.run == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
