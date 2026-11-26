@@ -70,6 +70,7 @@ select, input { background: var(--surface-1); border: 1px solid var(--border); b
 .chg { font-size: 13px; font-variant-numeric: tabular-nums; font-weight: 600; }
 .chg.up { color: var(--up); } .chg.down { color: var(--down); } .chg.flat { color: var(--text-muted); }
 .meta { font-size: 11px; color: var(--text-muted); display: flex; gap: 8px; flex-wrap: wrap; }
+.meta .short-hist { color: var(--text-secondary); border: 1px solid var(--grid); border-radius: 4px; padding: 0 5px; cursor: help; }
 .meta .err { color: var(--warn-ink); background: var(--warn-bg); border-radius: 4px; padding: 0 5px; }
 .chart-box { position: relative; height: 180px; margin-top: 8px; }
 .grid[data-cols="1"] .chart-box { height: 260px; }

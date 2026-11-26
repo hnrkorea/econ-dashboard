@@ -5,7 +5,8 @@
   const params = new URLSearchParams(location.search);
   const DATA_DIR = params.has("sample") ? "sample-data" : "data";
   const STORE_KEY = "econ-dash-v1";
-  const PERIOD_DAYS = { "1m": 31, "1y": 366, "5y": 366 * 5 + 2, "10y": 366 * 10 + 3 };
+  const PERIOD_DAYS = { "1m": 31, "1y": 366, "5y": 366 * 5 + 2, "10y": 366 * 10 + 3, "30y": 366 * 30 + 8 };
+  const MAX_DRAW_POINTS = 1500; // 이보다 많으면 그리기용으로 솎아냄(30년 일별 ≈ 7,800점)
   const MIN_POINTS = 6; // 월·분기 지표는 기간이 짧아도 최소 이만큼 보여줌
   const SOURCE_LABEL = { yahoo: "Yahoo", fred: "FRED", ecos: "ECOS", manual: "수동" };
 
@@ -112,6 +113,7 @@
         <div class="meta">
           <span>${ind.last_date ? `기준일 ${esc(ind.last_date)}` : "데이터 없음"}</span>
           <span>${SOURCE_LABEL[ind.source] || esc(ind.source)}</span>
+          ${shortHistoryHTML(ind)}
           ${status}
         </div>
         <div class="chart-box"><canvas aria-label="${esc(ind.name)} 추이 그래프" role="img"></canvas></div>
@@ -120,9 +122,33 @@
       </article>`;
   }
 
+  const periodCut = () => new Date(Date.now() - (PERIOD_DAYS[state.period] || PERIOD_DAYS["1y"]) * 864e5).toISOString().slice(0, 10);
+
+  // 선택한 기간보다 데이터가 짧으면 "YYYY-MM부터" 표시 (1년 넘게 모자랄 때만)
+  function shortHistoryHTML(ind) {
+    const first = ind.first_date;
+    if (!first) return "";
+    if ((new Date(first) - new Date(periodCut())) / 864e5 < 365) return "";
+    const tip = ind.history_note || "출처 데이터가 이 시점부터 제공됨";
+    return `<span class="short-hist" title="${esc(tip)}">데이터 ${esc(first.slice(0, 7))}부터</span>`;
+  }
+
+  // 점이 너무 많으면 균등 간격으로 솎되, 계단형(금리)은 값이 바뀌는 점을 모두 남김
+  function thin(pts, style) {
+    if (pts.length <= MAX_DRAW_POINTS) return pts;
+    if (style === "step") {
+      const out = pts.filter((p, i) => i === 0 || i === pts.length - 1 || p[1] !== pts[i - 1][1] || pts[i + 1][1] !== p[1]);
+      if (out.length <= MAX_DRAW_POINTS * 2) return out;
+    }
+    const step = Math.ceil(pts.length / MAX_DRAW_POINTS);
+    const out = pts.filter((_, i) => i % step === 0);
+    if (out[out.length - 1] !== pts[pts.length - 1]) out.push(pts[pts.length - 1]);
+    return out;
+  }
+
   function sliceForPeriod(pts) {
     if (!pts || !pts.length) return [];
-    const cut = new Date(Date.now() - PERIOD_DAYS[state.period] * 864e5).toISOString().slice(0, 10);
+    const cut = periodCut();
     let i = pts.findIndex((p) => p[0] >= cut);
     if (i === -1) i = pts.length;
     i = Math.min(i, Math.max(0, pts.length - MIN_POINTS));
@@ -134,7 +160,7 @@
   function drawChart(ind) {
     const card = document.getElementById(`card-${ind.id}`);
     const box = $(".chart-box", card);
-    const pts = sliceForPeriod(series[ind.id]);
+    const pts = thin(sliceForPeriod(series[ind.id]), ind.style);
     if (pts.length < 2) {
       box.innerHTML = `<div class="empty">${ind.pending ? "config/indicators.json에 추가하고 커밋하면<br>다음 수집부터 표시됩니다" : "표시할 데이터가 없습니다"}</div>`;
       return;
@@ -143,7 +169,8 @@
     const isBar = ind.style === "bar";
     const d = ind.decimals ?? 2;
     const spanDays = (new Date(pts[pts.length - 1][0]) - new Date(pts[0][0])) / 864e5;
-    const shortLabel = spanDays <= 62; // 짧은 구간은 월-일, 긴 구간은 연-월
+    const shortLabel = spanDays <= 62; // 짧은 구간은 월-일, 긴 구간은 연-월, 아주 긴 구간은 연도만
+    const yearLabel = spanDays > 365 * 12;
     charts[ind.id] = new Chart($("canvas", box), {
       type: isBar ? "bar" : "line",
       data: {
@@ -178,7 +205,7 @@
         },
         scales: {
           x: { grid: { display: false }, border: { color: grid }, ticks: { color: ink2, maxTicksLimit: 5, maxRotation: 0, font: { size: 10 },
-               callback: function (v) { const s = this.getLabelForValue(v); return shortLabel ? s.slice(5) : s.slice(0, 7); } } },
+               callback: function (v) { const s = this.getLabelForValue(v); return shortLabel ? s.slice(5) : yearLabel ? s.slice(0, 4) : s.slice(0, 7); } } },
           y: { grid: { color: grid }, border: { display: false }, beginAtZero: isBar, ticks: { color: ink2, maxTicksLimit: 5, font: { size: 10 } } },
         },
       },
@@ -277,7 +304,7 @@
       b.onclick = () => {
         state.period = b.dataset.p; save();
         document.querySelectorAll("#period button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-        renderGrid();
+        renderGrid(); // 카드를 다시 만들며 '데이터 YYYY-MM부터' 표시도 기간에 맞게 갱신
       };
     });
     $("#cols").value = state.cols;

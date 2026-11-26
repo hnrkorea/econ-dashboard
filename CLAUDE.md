@@ -28,6 +28,14 @@
    - `data/index.json`에 `fallback_used` 필드 추가(평소 false, 폴백 전환 시 true) — app.js는 알 수 없는 필드를 무시하므로 수정 불필요
 5. ~~**배포**~~ — 2026-11-21 완료. `hnrkorea/econ-dashboard` (Public) 생성·push, Secrets(ECOS_API_KEY/FRED_API_KEY) 등록, Actions 쓰기권한, Pages 활성화, 수동 실행까지 16/16 성공 확인. https://hnrkorea.github.io/econ-dashboard/
 
+6. ~~**30년 기간**~~ — 2026-11-27. 화면에 30년 버튼 추가, 수집 기간 `YEARS = 30`.
+   - Yahoo는 `range=30y`를 지원하지 않아 `period1/period2`로 요청. ECOS는 1회 1만 건 제한이라 페이지 나눠 받음(기준금리 일별 30년 ≈ 1만 66건)
+   - `with_history()`: 기존 data 파일의 과거 점을 유지하고, 없으면 config `"backfill"` 소스로 한 번만 채움(매시간 재수집 안 함)
+   - 백필: us_fed_rate←FRED DFEDTAR(2008-12 이전), usdkrw←ECOS 731Y001(2003-12 이전), wti←FRED DCOILWTICO(2000-08 이전)
+   - 30년보다 짧은 지표(config `history_note`): 코스닥 2000-10, 비트코인 2014-09, 금 선물 2000-08, 한국 기준금리 1999-05, 코픽스 2010, 서울 아파트 실거래지수 2006-01
+   - index.json에 `first_date` 추가 → 기간보다 1년 넘게 짧으면 카드에 "데이터 YYYY-MM부터" 표시
+   - 화면은 1,500점 넘으면 솎아서 그림(계단형은 값 변화점 유지)
+
 ## 완료 상태
 1~5번 전부 완료(2026-11-21). 매시 7분 GitHub Actions가 자동 수집·커밋, GitHub Pages가 서빙. 추가로 필요한 조치가 보이면 이 섹션 위에 새 작업으로 추가.
 
