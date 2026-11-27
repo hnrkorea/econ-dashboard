@@ -22,18 +22,19 @@ for ind in cfg["indicators"]:
     v, pts = start.get(ind["id"], 100), []
     style = ind.get("style")
     if style == "bar":  # 분기
-        for q in range(40):
-            d = dt.date(today.year - 10 + (q // 4), (q % 4) * 3 + 1, 1)
+        for q in range(120):
+            d = dt.date(today.year - 30 + (q // 4), (q % 4) * 3 + 1, 1)
             pts.append((d.isoformat(), round(random.gauss(v, 0.6), 1)))
     elif style == "step":  # 월
-        for m in range(120):
-            y, mm = divmod(today.month - 120 + m - 1, 12)
+        for m in range(360):
+            y, mm = divmod(today.month - 360 + m - 1, 12)
             d = dt.date(today.year + y, mm + 1, 1)
             if random.random() < 0.08:
                 v += random.choice([-0.25, 0.25])
             pts.append((d.isoformat(), round(v, 2)))
     else:  # 일
-        d = today - dt.timedelta(days=365 * 10)
+        # btc_krw는 실제처럼 짧은 이력(2014-09~) 예시
+        d = today - dt.timedelta(days=365 * (12 if ind["id"] == "btc_krw" else 30))
         while d <= today:
             if d.weekday() < 5:
                 v *= 1 + random.gauss(0.0003, 0.011)
@@ -42,7 +43,7 @@ for ind in cfg["indicators"]:
     (OUT / f"{ind['id']}.json").write_text(json.dumps({"id": ind["id"], "points": pts}), encoding="utf-8")
     meta = {k: ind.get(k) for k in ("id", "name", "group", "unit", "decimals", "style", "visible", "source", "note")}
     meta.update(ok=ind["id"] != "cofix", error=None if ind["id"] != "cofix" else "샘플: 수집 실패 표시 예시",
-                fetched_at=now, last_date=pts[-1][0], last_value=pts[-1][1], prev_value=pts[-2][1], count=len(pts))
+                fetched_at=now, last_date=pts[-1][0], last_value=pts[-1][1], prev_value=pts[-2][1], count=len(pts), first_date=pts[0][0])
     entries.append(meta)
 (OUT / "index.json").write_text(json.dumps({"generated_at": now, "indicators": entries}, ensure_ascii=False, indent=1),
                                 encoding="utf-8")

@@ -22,7 +22,7 @@ import requests
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "indicators.json"
 DATA = ROOT / "data"
-YEARS = 10
+YEARS = 30  # 화면 최장 기간(30년). 바꾸면 assets/app.js PERIOD_DAYS도 확인
 UA = {"User-Agent": "Mozilla/5.0 (econ-dashboard; +https://github.com)"}
 TIMEOUT = 20
 
@@ -35,7 +35,10 @@ def start_date() -> dt.date:
 
 def fetch_yahoo(ind):
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{requests.utils.quote(ind['symbol'])}"
-    r = requests.get(url, params={"range": f"{YEARS}y", "interval": "1d"}, headers=UA, timeout=TIMEOUT)
+    # range=30y 같은 값은 Yahoo가 지원하지 않아 period1/period2(유닉스 초)로 기간을 지정
+    p1 = int(dt.datetime.combine(start_date(), dt.time(), dt.timezone.utc).timestamp())
+    p2 = int(time.time()) + 86400
+    r = requests.get(url, params={"period1": p1, "period2": p2, "interval": "1d"}, headers=UA, timeout=TIMEOUT)
     r.raise_for_status()
     res = r.json()["chart"]["result"][0]
     meta = res["meta"]
@@ -100,19 +103,23 @@ def fetch_ecos(ind):
         raise RuntimeError("ECOS_API_KEY 없음")
     cyc = ind["cycle"]
     s, e = _ecos_period(cyc, start_date()), _ecos_period(cyc, dt.date.today())
-    url = (f"https://ecos.bok.or.kr/api/StatisticSearch/{key}/json/kr/1/10000/"
-           f"{ind['stat']}/{cyc}/{s}/{e}/{ind['item']}")
-    r = requests.get(url, timeout=TIMEOUT)
-    r.raise_for_status()
-    j = r.json()
-    if "StatisticSearch" not in j:
-        raise RuntimeError(f"ECOS 응답 오류: {j.get('RESULT', j)}")
-    out = []
-    for row in j["StatisticSearch"]["row"]:
-        v = row.get("DATA_VALUE")
-        if v in (None, "", "-"):
-            continue
-        out.append((_ecos_time_to_date(cyc, row["TIME"]), float(v)))
+    # ECOS는 한 번에 최대 10000건. 30년 일별(예: 기준금리 약 1만 건)은 나눠서 받는다
+    out, first, page, total = [], 1, 10000, None
+    while total is None or first <= total:
+        url = (f"https://ecos.bok.or.kr/api/StatisticSearch/{key}/json/kr/{first}/{first + page - 1}/"
+               f"{ind['stat']}/{cyc}/{s}/{e}/{ind['item']}")
+        r = requests.get(url, timeout=TIMEOUT)
+        r.raise_for_status()
+        j = r.json()
+        if "StatisticSearch" not in j:
+            raise RuntimeError(f"ECOS 응답 오류: {j.get('RESULT', j)}")
+        total = int(j["StatisticSearch"].get("list_total_count", 0))
+        for row in j["StatisticSearch"]["row"]:
+            v = row.get("DATA_VALUE")
+            if v in (None, "", "-"):
+                continue
+            out.append((_ecos_time_to_date(cyc, row["TIME"]), float(v)))
+        first += page
     return sorted(out)
 
 
@@ -127,7 +134,8 @@ def fetch_kfb_cofix(ind):
     정적 HTML 표이며 ?BasicYear=연도 로 과거 연도를 조회한다."""
     url = "https://portal.kfb.or.kr/fingoods/cofix.php"
     points = {}
-    for year in range(start_date().year, dt.date.today().year + 1):
+    # 코픽스는 2010년 도입이라 그 이전 연도는 조회하지 않음
+    for year in range(max(2010, start_date().year), dt.date.today().year + 1):
         r = requests.get(url, params={"BasicYear": year}, headers=UA, timeout=TIMEOUT)
         r.raise_for_status()
         # 같은 페이지 아래쪽에 "단기 COFIX" 표가 또 있어 신규취급액기준 표만 잘라서 본다
@@ -173,6 +181,31 @@ def fetch_one(ind):
             ) from fb_err
 
 
+def with_history(ind, pts):
+    """새로 받은 pts 앞쪽(더 오래된 구간)을 채운다.
+    1) 기존 data/<id>.json 에 이미 있는 더 오래된 점을 그대로 이어 붙임(매시간 재수집 방지,
+       폴백 소스가 10년치만 줄 때도 과거가 지워지지 않음)
+    2) 그런 점이 없고 config에 "backfill" 소스가 있으면 그 소스에서 pts 시작일 이전 구간을 받아 붙임
+    그리고 YEARS 범위 밖은 잘라낸다."""
+    cut = start_date().isoformat()
+    first = pts[0][0]
+    earlier = []
+    path = DATA / f"{ind['id']}.json"
+    if path.exists():
+        try:
+            earlier = [tuple(p) for p in json.loads(path.read_text(encoding="utf-8"))["points"] if p[0] < first]
+        except Exception as ex:  # noqa: BLE001
+            print(f"  경고 {ind['id']}: 기존 파일 읽기 실패({ex})", file=sys.stderr)
+    bf = ind.get("backfill")
+    if bf and not any(d >= cut for d, _ in earlier):
+        try:
+            earlier = [p for p in FETCHERS[bf["source"]](bf) if p[0] < first]
+            print(f"  백필 {ind['id']}: {bf['source']} {len(earlier)}건 ({earlier[0][0] if earlier else '-'} ~)")
+        except Exception as ex:  # noqa: BLE001 - 백필 실패는 본 데이터에 영향 없음, 다음 회차에 재시도
+            print(f"  경고 {ind['id']}: 백필 실패({ex})", file=sys.stderr)
+    return [p for p in earlier + list(pts) if p[0] >= cut]
+
+
 def main() -> int:
     cfg = json.loads(CONFIG.read_text(encoding="utf-8"))
     DATA.mkdir(exist_ok=True)
@@ -184,23 +217,27 @@ def main() -> int:
     now = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     entries, failures = [], 0
     for ind in cfg["indicators"]:
-        meta = {k: ind.get(k) for k in ("id", "name", "group", "unit", "decimals", "style", "visible", "source", "note")}
+        meta = {k: ind.get(k) for k in ("id", "name", "group", "unit", "decimals", "style", "visible", "source", "note",
+                                        "history_note")}
         try:
             pts, used_fallback = fetch_one(ind)
             if not pts:
                 raise RuntimeError("데이터 0건")
+            pts = with_history(ind, pts)
+            nd = (ind.get("decimals") or 2) + 2  # 파일 크기 절약(표시 자릿수 + 2자리)
+            pts = [(d, round(v, nd)) for d, v in pts]
             (DATA / f"{ind['id']}.json").write_text(
                 json.dumps({"id": ind["id"], "points": pts}, ensure_ascii=False, separators=(",", ":")),
                 encoding="utf-8")
             meta.update(ok=True, error=None, fetched_at=now, last_date=pts[-1][0], last_value=pts[-1][1],
                         prev_value=pts[-2][1] if len(pts) > 1 else None, count=len(pts),
-                        fallback_used=used_fallback)
+                        fallback_used=used_fallback, first_date=pts[0][0])
             tag = "OK(F)" if used_fallback else "OK   "
             print(f"{tag} {ind['id']:14s} {len(pts):5d}건  최신 {pts[-1][0]} = {pts[-1][1]}")
         except Exception as ex:  # noqa: BLE001 - 지표 하나 실패가 전체를 멈추지 않게
             failures += 1
             prev = old_index.get(ind["id"], {})
-            meta.update({k: prev.get(k) for k in ("fetched_at", "last_date", "last_value", "prev_value", "count")})
+            meta.update({k: prev.get(k) for k in ("fetched_at", "last_date", "last_value", "prev_value", "count", "first_date")})
             meta.update(ok=False, error=str(ex)[:300])
             print(f"FAIL {ind['id']:14s} {ex}", file=sys.stderr)
         entries.append(meta)
