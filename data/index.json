@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-27T00:00:50+00:00",
+ "generated_at": "2026-11-27T01:00:41+00:00",
  "indicators": [
   {
    "id": "dji",
@@ -11,14 +11,16 @@
    "visible": true,
    "source": "yahoo",
    "note": null,
+   "history_note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-11-25",
    "last_value": 50182.95,
-   "prev_value": 50018.69921875,
-   "count": 2513,
-   "fallback_used": false
+   "prev_value": 50018.6992,
+   "count": 7563,
+   "fallback_used": false,
+   "first_date": "1996-11-04"
   },
   {
    "id": "spx",
@@ -30,14 +32,16 @@
    "visible": true,
    "source": "yahoo",
    "note": null,
+   "history_note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-11-25",
    "last_value": 7182.78,
-   "prev_value": 7201.08984375,
-   "count": 2513,
-   "fallback_used": false
+   "prev_value": 7201.0898,
+   "count": 7563,
+   "fallback_used": false,
+   "first_date": "1996-11-04"
   },
   {
    "id": "ixic",
@@ -49,14 +53,16 @@
    "visible": true,
    "source": "yahoo",
    "note": null,
+   "history_note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-11-25",
    "last_value": 23585.803,
-   "prev_value": 23733.5390625,
-   "count": 2513,
-   "fallback_used": false
+   "prev_value": 23733.5391,
+   "count": 7563,
+   "fallback_used": false,
+   "first_date": "1996-11-04"
   },
   {
    "id": "kospi",
@@ -68,14 +74,16 @@
    "visible": true,
    "source": "yahoo",
    "note": null,
+   "history_note": "Yahoo 데이터가 1996-12부터",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
-   "last_date": "2026-11-26",
-   "last_value": 4711.21,
-   "prev_value": 4697.509765625,
-   "count": 2447,
-   "fallback_used": false
+   "fetched_at": "2026-11-27T01:00:41+00:00",
+   "last_date": "2026-11-27",
+   "last_value": 4725.66,
+   "prev_value": 4697.5098,
+   "count": 7374,
+   "fallback_used": false,
+   "first_date": "1996-12-11"
   },
   {
    "id": "kosdaq",
@@ -87,14 +95,16 @@
    "visible": true,
    "source": "yahoo",
    "note": null,
+   "history_note": "Yahoo 데이터가 2000-10부터",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
-   "last_date": "2026-11-26",
-   "last_value": 655.71,
-   "prev_value": 650.6400146484375,
-   "count": 2447,
-   "fallback_used": false
+   "fetched_at": "2026-11-27T01:00:41+00:00",
+   "last_date": "2026-11-27",
+   "last_value": 682.88,
+   "prev_value": 650.64,
+   "count": 6435,
+   "fallback_used": false,
+   "first_date": "2000-10-16"
   },
   {
    "id": "usdkrw",
@@ -106,14 +116,16 @@
    "visible": true,
    "source": "yahoo",
    "note": "폴백(ECOS 매매기준율)은 Yahoo 실시간가보다 보통 1% 안팎 낮게 나올 수 있음",
+   "history_note": "2003-12 이전은 ECOS 매매기준율로 채움(Yahoo 데이터가 2003-12부터)",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-11-27",
-   "last_value": 1345.48,
-   "prev_value": 1342.969970703125,
-   "count": 2602,
-   "fallback_used": false
+   "last_value": 1343.28,
+   "prev_value": 1342.97,
+   "count": 8064,
+   "fallback_used": false,
+   "first_date": "1996-11-04"
   },
   {
    "id": "btc_krw",
@@ -125,14 +137,16 @@
    "visible": true,
    "source": "yahoo",
    "note": null,
+   "history_note": "Yahoo 원화 시세가 2014-09부터",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
-   "last_date": "2026-11-26",
-   "last_value": 81304344.0,
+   "fetched_at": "2026-11-27T01:00:41+00:00",
+   "last_date": "2026-11-27",
+   "last_value": 81409944.0,
    "prev_value": 81185056.0,
-   "count": 3652,
-   "fallback_used": false
+   "count": 4454,
+   "fallback_used": false,
+   "first_date": "2014-09-17"
   },
   {
    "id": "kr_base_rate",
@@ -144,14 +158,16 @@
    "visible": true,
    "source": "ecos",
    "note": "ECOS 일별 시리즈(722Y001/D). 금통위 결정이 보통 1~3일 안에 반영됨",
+   "history_note": "기준금리(콜금리 목표) 제도가 1999-05 도입되어 그 이전 값 없음",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-11-26",
    "last_value": 3.25,
    "prev_value": 3.0,
-   "count": 3680,
-   "fallback_used": false
+   "count": 10066,
+   "fallback_used": false,
+   "first_date": "1999-05-06"
   },
   {
    "id": "us_fed_rate",
@@ -163,14 +179,16 @@
    "visible": true,
    "source": "fred",
    "note": null,
+   "history_note": "2008-12-16 이전은 단일 목표금리(FRED DFEDTAR)로 채움. 범위 목표제는 2008-12부터",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-11-26",
    "last_value": 4.0,
    "prev_value": 4.0,
-   "count": 3680,
-   "fallback_used": false
+   "count": 10980,
+   "fallback_used": false,
+   "first_date": "1996-11-04"
   },
   {
    "id": "us10y",
@@ -182,14 +200,16 @@
    "visible": true,
    "source": "yahoo",
    "note": "Yahoo ^TNX 값은 % 단위",
+   "history_note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-11-25",
    "last_value": 4.848,
-   "prev_value": 4.9039998054504395,
-   "count": 2514,
-   "fallback_used": false
+   "prev_value": 4.904,
+   "count": 7549,
+   "fallback_used": false,
+   "first_date": "1996-11-04"
   },
   {
    "id": "kr_loan_rate",
@@ -201,14 +221,16 @@
    "visible": true,
    "source": "ecos",
    "note": null,
+   "history_note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-10-01",
    "last_value": 4.64,
    "prev_value": 4.57,
-   "count": 121,
-   "fallback_used": false
+   "count": 359,
+   "fallback_used": false,
+   "first_date": "1996-12-01"
   },
   {
    "id": "cofix",
@@ -220,14 +242,16 @@
    "visible": true,
    "source": "kfb_cofix",
    "note": "ECOS에 코픽스 통계표 없어 은행연합회 소비자포털(portal.kfb.or.kr) 공시 표를 직접 수집. 월 1회(매월 15일경) 갱신",
+   "history_note": "코픽스는 2010년 도입",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-10-01",
    "last_value": 3.62,
    "prev_value": 3.43,
-   "count": 131,
-   "fallback_used": false
+   "count": 202,
+   "fallback_used": false,
+   "first_date": "2010-01-01"
   },
   {
    "id": "kr_gdp",
@@ -239,14 +263,16 @@
    "visible": true,
    "source": "ecos",
    "note": null,
+   "history_note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-07-01",
    "last_value": 1.0,
    "prev_value": 0.6,
-   "count": 40,
-   "fallback_used": false
+   "count": 119,
+   "fallback_used": false,
+   "first_date": "1997-01-01"
   },
   {
    "id": "seoul_apt_price",
@@ -258,14 +284,16 @@
    "visible": true,
    "source": "ecos",
    "note": "실거래 등록 특성상 최신월이 2~3개월 지연 표시될 수 있음",
+   "history_note": "지수가 2006-01부터 작성됨",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-08-01",
    "last_value": 102.6,
    "prev_value": 101.8,
-   "count": 119,
-   "fallback_used": false
+   "count": 248,
+   "fallback_used": false,
+   "first_date": "2006-01-01"
   },
   {
    "id": "wti",
@@ -277,14 +305,16 @@
    "visible": true,
    "source": "yahoo",
    "note": null,
+   "history_note": "2000-08 이전은 FRED WTI 현물가(DCOILWTICO)로 채움(Yahoo 선물 데이터가 2000-08부터)",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-11-26",
-   "last_value": 84.98,
-   "prev_value": 83.68000030517578,
-   "count": 2515,
-   "fallback_used": false
+   "last_value": 85.22,
+   "prev_value": 83.68,
+   "count": 7358,
+   "fallback_used": false,
+   "first_date": "1996-11-05"
   },
   {
    "id": "gold",
@@ -296,14 +326,16 @@
    "visible": true,
    "source": "yahoo",
    "note": null,
+   "history_note": "Yahoo 선물 데이터가 2000-08부터(FRED 금 시세는 2022년 중단되어 대체 소스 없음)",
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-11-26",
-   "last_value": 3592.8,
-   "prev_value": 3535.800048828125,
-   "count": 2515,
-   "fallback_used": false
+   "last_value": 3586.9,
+   "prev_value": 3535.8,
+   "count": 6586,
+   "fallback_used": false,
+   "first_date": "2000-08-29"
   },
   {
    "id": "us_gdp",
@@ -315,14 +347,16 @@
    "visible": false,
    "source": "fred",
    "note": null,
+   "history_note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-07-01",
    "last_value": 4.3,
    "prev_value": 2.2,
-   "count": 40,
-   "fallback_used": false
+   "count": 119,
+   "fallback_used": false,
+   "first_date": "1997-01-01"
   },
   {
    "id": "dxy",
@@ -334,14 +368,16 @@
    "visible": false,
    "source": "yahoo",
    "note": null,
+   "history_note": null,
    "ok": true,
    "error": null,
-   "fetched_at": "2026-11-27T00:00:50+00:00",
+   "fetched_at": "2026-11-27T01:00:41+00:00",
    "last_date": "2026-11-26",
-   "last_value": 103.777,
-   "prev_value": 103.66999816894531,
-   "count": 2516,
-   "fallback_used": false
+   "last_value": 103.856,
+   "prev_value": 103.67,
+   "count": 7619,
+   "fallback_used": false,
+   "first_date": "1996-11-04"
   }
  ]
 }
