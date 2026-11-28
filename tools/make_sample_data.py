@@ -14,7 +14,8 @@ random.seed(7)
 cfg = json.loads((ROOT / "config" / "indicators.json").read_text(encoding="utf-8"))
 start = {"dji": 30000, "spx": 3800, "ixic": 11000, "kospi": 2400, "kosdaq": 750, "usdkrw": 1250,
          "kr_base_rate": 3.0, "us_fed_rate": 4.5, "us10y": 3.8, "kr_loan_rate": 4.8, "cofix": 3.6,
-         "kr_gdp": 0.5, "wti": 75, "gold": 1900, "us_gdp": 2.0, "dxy": 102}
+         "kr_gdp": 0.5, "wti": 75, "gold": 1900, "us_gdp": 2.0, "dxy": 102,
+         "us_m2_yoy": 6.0, "kr_m2_yoy": 7.0}
 today = dt.date.today()
 now = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
 entries = []

@@ -27,8 +27,10 @@ UA = {"User-Agent": "Mozilla/5.0 (econ-dashboard; +https://github.com)"}
 TIMEOUT = 20
 
 
-def start_date() -> dt.date:
-    return dt.date.today() - dt.timedelta(days=365 * YEARS + 30)
+def start_date(ind=None) -> dt.date:
+    """수집 시작일. transform:"yoy" 지표는 첫 해의 전년동월비를 계산하려고 1년 더 앞에서부터 받는다."""
+    extra = 400 if ind and ind.get("transform") == "yoy" else 0
+    return dt.date.today() - dt.timedelta(days=365 * YEARS + 30 + extra)
 
 
 # ---------- 소스별 수집기: [(YYYY-MM-DD, float), ...] 를 반환 ----------
@@ -36,7 +38,7 @@ def start_date() -> dt.date:
 def fetch_yahoo(ind):
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{requests.utils.quote(ind['symbol'])}"
     # range=30y 같은 값은 Yahoo가 지원하지 않아 period1/period2(유닉스 초)로 기간을 지정
-    p1 = int(dt.datetime.combine(start_date(), dt.time(), dt.timezone.utc).timestamp())
+    p1 = int(dt.datetime.combine(start_date(ind), dt.time(), dt.timezone.utc).timestamp())
     p2 = int(time.time()) + 86400
     r = requests.get(url, params={"period1": p1, "period2": p2, "interval": "1d"}, headers=UA, timeout=TIMEOUT)
     r.raise_for_status()
@@ -65,7 +67,7 @@ def fetch_fred(ind):
     r = requests.get(
         "https://api.stlouisfed.org/fred/series/observations",
         params={"series_id": ind["series"], "api_key": key, "file_type": "json",
-                "observation_start": start_date().isoformat()},
+                "observation_start": start_date(ind).isoformat()},
         timeout=TIMEOUT,
     )
     r.raise_for_status()
@@ -102,7 +104,7 @@ def fetch_ecos(ind):
     if not key:
         raise RuntimeError("ECOS_API_KEY 없음")
     cyc = ind["cycle"]
-    s, e = _ecos_period(cyc, start_date()), _ecos_period(cyc, dt.date.today())
+    s, e = _ecos_period(cyc, start_date(ind)), _ecos_period(cyc, dt.date.today())
     # ECOS는 한 번에 최대 10000건. 30년 일별(예: 기준금리 약 1만 건)은 나눠서 받는다
     out, first, page, total = [], 1, 10000, None
     while total is None or first <= total:
@@ -181,6 +183,20 @@ def fetch_one(ind):
             ) from fb_err
 
 
+def to_yoy(pts):
+    """월별 수준값 → 전년동월대비 증가율(%). 12개월 전 값이 없는 달은 건너뛴다."""
+    by_date = dict(pts)
+    out = []
+    for d, v in pts:
+        prev = by_date.get(f"{int(d[:4]) - 1:04d}{d[4:]}")
+        if prev:
+            out.append((d, (v / prev - 1) * 100))
+    return out
+
+
+TRANSFORMS = {"yoy": to_yoy}
+
+
 def with_history(ind, pts):
     """새로 받은 pts 앞쪽(더 오래된 구간)을 채운다.
     1) 기존 data/<id>.json 에 이미 있는 더 오래된 점을 그대로 이어 붙임(매시간 재수집 방지,
@@ -221,6 +237,8 @@ def main() -> int:
                                         "history_note")}
         try:
             pts, used_fallback = fetch_one(ind)
+            if ind.get("transform"):
+                pts = TRANSFORMS[ind["transform"]](pts)
             if not pts:
                 raise RuntimeError("데이터 0건")
             pts = with_history(ind, pts)
